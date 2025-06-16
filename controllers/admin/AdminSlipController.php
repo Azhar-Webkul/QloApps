@@ -178,6 +178,21 @@ class AdminSlipControllerCore extends AdminController
                 }
                 $this->errors[] = $this->l('No order slips were found for this period.');
             }
+        } else if (Tools::isSubmit('generateVoucher')) {
+            $idOrderSlip = Tools::getValue('id_order_slip');
+            $objOrderSlip = new OrderSlip($idOrderSlip);
+            if (!Validate::isLoadedObject($objOrderSlip)) {
+                $this->errors[] = Tools::displayError('The credit slip is invalid.');
+            } elseif ($objOrderSlip->redeem_status == OrderSlip::REDEEM_STATUS_REDEEMED) {
+                $this->errors[] = Tools::displayError('The credit slip has already been redeemed.');
+            }
+
+            if (!count($this->errors)) {
+                if ($objOrderSlip->generateVoucher()) {
+                    Tools::redirect($_SERVER['HTTP_REFERER']);
+                }
+                $this->errors[] = Tools::displayError('The voucher code for this credit slip could not be generated.');
+            }
         } else {
             return parent::postProcess();
         }
@@ -273,9 +288,12 @@ class AdminSlipControllerCore extends AdminController
             ));
 
             return $this->createTemplate('_display_voucher_link.tpl')->fetch();
-        }
+        } else {
+            $voucherLink = $this->context->link->getAdminLink('AdminSlip', true) . '&generateVoucher=1&id_order_slip=' . (int) $row['id_order_slip'];
+            $this->context->smarty->assign('voucher_link', $voucherLink);
 
-        return '--';
+            return $this->createTemplate('_generate_voucher_link.tpl')->fetch();
+        }
     }
 
     public function displayStatusChangeLink($token, $id)
