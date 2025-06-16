@@ -189,7 +189,7 @@ class AdminSlipControllerCore extends AdminController
 
             if (!count($this->errors)) {
                 if ($objOrderSlip->generateVoucher()) {
-                    Tools::redirect($_SERVER['HTTP_REFERER']);
+                    Tools::redirectAdmin(self::$currentIndex);
                 }
                 $this->errors[] = Tools::displayError('The voucher code for this credit slip could not be generated.');
             }
