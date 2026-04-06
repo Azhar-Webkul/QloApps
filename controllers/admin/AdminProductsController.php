@@ -2023,6 +2023,15 @@ class AdminProductsControllerCore extends AdminController
         if (($error = $this->object->validateFieldsLang(false, true)) !== true) {
             $this->errors[] = $error;
         }
+        if(!count($this->errors)){
+            $objHotelRoomType = new HotelRoomType();
+            if($roomTypeInfo = $objHotelRoomType->getRoomTypeInfoByIdProduct($this->object->id)){
+                $objHotelBranchInformation = new HotelBranchInformation((int)$roomTypeInfo['id_hotel']);
+                if(!$objHotelBranchInformation->active){
+                    $this->errors[] = $this->l('Please enable the hotel "'.$roomTypeInfo['hotel_name'].'" first in order to update the status.');
+                }
+            }
+        }
 
         if (count($this->errors)) {
             return false;
@@ -2039,6 +2048,24 @@ class AdminProductsControllerCore extends AdminController
         }
 
         return $res;
+    }
+
+    public function processBulkStatusSelection($status)
+    {
+        if (is_array($this->boxes) && !empty($this->boxes)) {
+            foreach ($this->boxes as $id) {
+                $objHotelRoomType = new HotelRoomType();
+                if($roomTypeInfo = $objHotelRoomType->getRoomTypeInfoByIdProduct($id)){
+                    $objHotelBranchInformation = new HotelBranchInformation((int)$roomTypeInfo['id_hotel']);
+                    if(!$objHotelBranchInformation->active){
+                        $this->errors[] = $this->l('Please enable the hotel "'.$roomTypeInfo['hotel_name'].'" first in order to update the status.');
+                    }
+                }
+            }
+        }
+        if (!count($this->errors)) {
+            parent::processBulkStatusSelection($status);
+        }
     }
 
     public function processToggleShowAtFront()
