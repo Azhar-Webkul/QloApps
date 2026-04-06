@@ -1274,6 +1274,68 @@ class AdminOrdersControllerCore extends AdminController
         die(Tools::jsonEncode($response));
     }
 
+    public function ajaxProcessInitDeleteRoomBookingModal()
+    {
+        if ($this->tabAccess['edit'] !== 1) {
+            die(Tools::jsonEncode(array(
+                'hasError' => 1,
+                'error' => Tools::displayError('You do not have permission to edit this order.')
+            )));
+        }
+
+        // set modal details
+        $response['hasError'] = 1;
+        $id_order = (int) Tools::getValue('id_order');
+        $idProduct = (int) Tools::getValue('id_product');
+        $idOrderDetail = (int) Tools::getValue('id_order_detail');
+        $idRoom = (int) Tools::getValue('id_room');
+        $idHtlBooking = (int) Tools::getValue('id_htl_booking');
+        $idHotel = (int) Tools::getValue('id_hotel');
+        $dateFrom = (string) Tools::getValue('date_from');
+        $dateTo = (string) Tools::getValue('date_to');
+
+        if ($id_order
+            && $idProduct
+            && $idOrderDetail
+            && $idRoom
+            && $idHtlBooking
+            && $idHotel
+            && $dateFrom
+            && $dateTo
+        ) {
+            if (!Validate::isDate($dateFrom) || !Validate::isDate($dateTo)) {
+                die(Tools::jsonEncode(array(
+                    'hasError' => 1,
+                    'error' => Tools::displayError('Invalid date range.')
+                )));
+            }
+
+            $smartyVars = array(
+                'id_product' => $idProduct,
+                'id_order_detail' => $idOrderDetail,
+                'id_room' => $idRoom,
+                'date_from' => $dateFrom,
+                'date_to' => $dateTo,
+                'id_htl_booking' => $idHtlBooking,
+                'id_hotel' => $idHotel,
+                'id_order' => $id_order,
+            );
+            $this->context->smarty->assign($smartyVars);
+            $modal = array(
+                'modal_id' => 'delete-room-booking-modal',
+                'modal_class' => 'modal-md order_detail_modal',
+                'modal_title' => '<i class="icon icon-bed"></i> &nbsp'.$this->l('Delete Room'),
+                'modal_content' => $this->context->smarty->fetch('controllers/orders/modals/_delete_room_booking.tpl'),
+            );
+            $this->context->smarty->assign($modal);
+            $response['hasError'] = 0;
+            $response['modalHtml'] = $this->context->smarty->fetch('modal.tpl');
+        } else {
+            $response['error'] = Tools::displayError('Invalid data.');
+        }
+        die(Tools::jsonEncode($response));
+    }
+
 
     public function setMedia()
     {
@@ -1556,7 +1618,19 @@ class AdminOrdersControllerCore extends AdminController
 
                 if (!count($this->errors)) {
                     // Finally, reallocate the room
-                    if ($objBookingDetail->reallocateBooking($idHtlBookingFrom, $idRoomToReallocate, $priceDiff)) {
+	                    if ($objBookingDetail->reallocateBooking($idHtlBookingFrom, $idRoomToReallocate, $priceDiff)) {
+	                        $message = new Message();
+	                        if ($message_content = Tools::getValue('message')) {
+	                            if (Validate::isMessage($message_content)) {
+	                                $order = new Order((int) $idOrder);
+	                                $message->message = $message_content;
+	                                $message->id_cart = (int) $order->id_cart;
+	                                $message->id_customer = (int) $order->id_customer;
+	                                $message->id_order = (int)$idOrder;
+	                                $message->private = 1;
+	                                $message->save();
+	                            }
+	                        }
                         Tools::redirectAdmin(self::$currentIndex.'&id_order='.(int) $idOrder.'&vieworder&conf=52&token='.$this->token);
                     } else {
                         $this->errors[] = $this->l('Some error occured. Please try again.');
@@ -1598,7 +1672,19 @@ class AdminOrdersControllerCore extends AdminController
 
                 if (!count($this->errors)) {
                     $objBookingDetail = new HotelBookingDetail();
-                    if ($objBookingDetail->swapBooking($idHtlBookingFrom, $idHtlBookingToSwap)) {
+	                    if ($objBookingDetail->swapBooking($idHtlBookingFrom, $idHtlBookingToSwap)) {
+	                        $message = new Message();
+	                        if ($message_content = Tools::getValue('message')) {
+	                            if (Validate::isMessage($message_content)) {
+	                                $order = new Order((int) $idOrder);
+	                                $message->message = $message_content;
+	                                $message->id_cart = (int) $order->id_cart;
+	                                $message->id_customer = (int) $order->id_customer;
+	                                $message->id_order = (int)$idOrder;
+	                                $message->private = 1;
+	                                $message->save();
+	                            }
+	                        }
                         Tools::redirectAdmin(self::$currentIndex.'&id_order='.(int)$idOrder.'&vieworder&conf=53&token='.$this->token);
                     } else {
                         $this->errors[] = $this->l('Some error occured. Please try again.');
@@ -1760,7 +1846,6 @@ class AdminOrdersControllerCore extends AdminController
                         } else {
                             $customer_thread = new CustomerThread((int)$id_customer_thread);
                         }
-
                         $customer_message = new CustomerMessage();
                         $customer_message->id_customer_thread = $customer_thread->id;
                         $customer_message->id_employee = (int)$this->context->employee->id;
@@ -1784,7 +1869,7 @@ class AdminOrdersControllerCore extends AdminController
                                 '{order_name}' => $order->getUniqReference(),
                                 '{message}' => $message
                             );
-                            if (@Mail::Send(
+                            Mail::Send(
                                 (int)$order->id_lang,
                                 'order_merchant_comment',
                                 Mail::l('New message regarding your booking', (int)$order->id_lang),
@@ -1798,11 +1883,9 @@ class AdminOrdersControllerCore extends AdminController
                                 _PS_MAIL_DIR_,
                                 true,
                                 (int)$order->id_shop
-                            )) {
-                                Tools::redirectAdmin(self::$currentIndex.'&id_order='.$order->id.'&vieworder&conf=11'.'&token='.$this->token);
-                            }
+                            );
                         }
-                        $this->errors[] = Tools::displayError('An error occurred while sending an email to the customer.');
+                        Tools::dieOrLog(Tools::displayError('An error occurred while sending an email to the customer.'),false);
                     }
                 }
             } else {
@@ -5138,7 +5221,19 @@ class AdminOrdersControllerCore extends AdminController
         $order->total_discounts_tax_incl += (float)abs($cart->getOrderTotal(true, Cart::ONLY_DISCOUNTS));
 
         // Save changes of order
-        $order->update();
+        if($order->update()){
+        $message = new Message();
+            if ($message_content = Tools::getValue('message')) {
+                if (Validate::isMessage($message_content)) {
+                    $message->message = $message_content;
+                    $message->id_cart = (int)$this->context->cart->id;
+                    $message->id_customer = (int)$this->context->cart->id_customer;
+                    $message->id_order = (int)$order->id;
+                    $message->private = 1;
+                    $message->save();
+                }
+            }
+        }
 
         // Update weight SUM
         $order_carrier = new OrderCarrier((int)$order->getIdOrderCarrier());
@@ -6198,7 +6293,19 @@ class AdminOrdersControllerCore extends AdminController
         $order->total_paid = Tools::ps_round($order->getOrderTotal(), _PS_PRICE_COMPUTE_PRECISION_);
         $order->total_paid_tax_incl = Tools::ps_round($order->getOrderTotal(), _PS_PRICE_COMPUTE_PRECISION_);
         $order->total_paid_tax_excl = Tools::ps_round($order->getOrderTotal(false), _PS_PRICE_COMPUTE_PRECISION_);
-        $order->save();
+        if($order->save()){
+            $message = new Message();
+            if ($message_content = Tools::getValue('message')) {
+                if (Validate::isMessage($message_content)) {
+                    $message->message = $message_content;
+                    $message->id_cart = (int)$this->context->cart->id;
+                    $message->id_customer = (int)$this->context->cart->id_customer;
+                    $message->id_order = (int)$order->id;
+                    $message->private = 1;
+                    $message->save();
+                }
+            }
+        }
 
         // Save order invoice
         if (isset($order_invoice) && $order_invoice instanceof OrderInvoice) {
@@ -6358,7 +6465,7 @@ class AdminOrdersControllerCore extends AdminController
     public function ajaxProcessDeleteRoomLine()
     {
         // Check tab access is allowed to edit
-        if (!$this->tabAccess['edit'] === 1) {
+        if ($this->tabAccess['edit'] !== 1) {
             die(json_encode(array(
                 'result' => false,
                 'error' => Tools::displayError('You do not have permission to edit this order.')
@@ -6637,7 +6744,19 @@ class AdminOrdersControllerCore extends AdminController
             $objBookingDetail->id_order
         );
 
-        $objBookingDetail->delete();
+        if($objBookingDetail->delete()){
+            $message = new Message();
+            if ($message_content = Tools::getValue('message')) {
+                if (Validate::isMessage($message_content)) {
+                    $message->message = $message_content;
+                    $message->id_cart = (int) $objBookingDetail->id_cart;
+                    $message->id_customer = (int) $order->id_customer;
+                    $message->id_order = (int)$order->id;
+                    $message->private = 1;
+                    $message->save();
+                }
+            }
+        }
 
         // delete refund request of the room if exists.
         OrderReturnDetail::deleteReturnDetailByIdBookingDetail($id_order, $idHotelBooking);
