@@ -84,7 +84,6 @@ class QloHotelReviewDefaultModuleFrontController extends ModuleFrontController
                 );
             }
         }
-
         if (is_array($_FILES) && array_key_exists('images', $_FILES) ) {
             $allowedExtensions = array('jpg', 'png', 'jpeg',);
             foreach ($_FILES['images']['name'] as $key => $imageName) {
@@ -94,7 +93,6 @@ class QloHotelReviewDefaultModuleFrontController extends ModuleFrontController
                 }
             }
         }
-
         if (!count($errors['by_key']) && !count($errors['general'])) {
             $customerReview = QhrHotelReview::getByCustomer(
                 $objOrder->id_customer,
