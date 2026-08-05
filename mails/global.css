@@ -1,0 +1,226 @@
+body, table, td, p, span, a, li {
+	font-family: 'Inter', Helvetica, Arial, sans-serif;
+	color: #333333;
+}
+
+body {
+	margin: 0;
+	padding: 0;
+	background-color: #ffffff;
+	-webkit-text-size-adjust: none;
+}
+
+.qlo-container {
+    width: 800px;
+	padding: 20px;
+	margin: 0 auto;
+	background-color: #ffffff;
+}
+
+.qlo-logo img {
+	display: block;
+	border: 0;
+}
+
+.qlo-display-heading {
+	font-family: 'Playfair Display', Georgia, 'Times New Roman', serif;
+	font-weight: 900;
+	font-size: 35px;
+	color: #121a26;
+	margin: 0;
+}
+
+.qlo-heading {
+	font-weight: 600;
+	font-size: 22px;
+	line-height: 1.2;
+	margin: 0 0 10px;
+}
+
+.qlo-subtitle {
+	font-size: 16px;
+	line-height: 150%;
+	color: #71717a;
+	margin: 0;
+}
+
+.qlo-section-title {
+	font-weight: 600;
+	font-size: 16px;
+	line-height: 150%;
+	padding-bottom: 10px;
+	border-bottom: 1px solid #e4e4e4;
+}
+.qlo-divider {
+	border-top: 1px solid #e4e4e4;
+	font-size: 1px;
+	line-height: 1px;
+	padding-bottom: 10px;
+}
+
+.qlo-card {
+	background-color: #f8f8f8;
+	border-radius: 12px;
+	/* padding: 0px 30px; */
+}
+
+.qlo-body-text {
+    padding-bottom: 10px;
+	font-size: 16px;
+	line-height: 150%;
+	color: #71717a;
+}
+
+/* Two-column "label:- value" summary grid (account email, order Summary of Order block) */
+.qlo-label {
+	font-size: 14px;
+	padding-bottom: 10px;
+}
+
+.qlo-value {
+	font-weight: 600;
+	font-size: 14px;
+	color: #555555;
+	padding-bottom: 10px;
+}
+
+/* Data tables: room bookings, extra demands, additional services */
+.qlo-table {
+	width: 100%;
+	border-collapse: collapse;
+}
+
+.qlo-table th {
+	background-color: #eff4fd;
+	border: 1px solid #e4e4e4;
+	font-family: 'Roboto', Helvetica, Arial, sans-serif;
+	font-weight: 500;
+	font-size: 12px;
+	color: #141414;
+	text-align: left;
+	padding: 8px;
+}
+
+.qlo-table td {
+	border: 1px solid #e4e4e4;
+	font-family: 'Roboto', Helvetica, Arial, sans-serif;
+	font-weight: 400;
+	font-size: 12px;
+	color: #141414;
+	text-align: left;
+	padding: 8px;
+}
+
+.qlo-table td.qlo-table-empty {
+	text-align: center;
+	padding: 12px 8px;
+}
+
+.qlo-table img {
+	width: 60px;
+	height: 60px;
+	border-radius: 4px;
+	border: 0;
+}
+.qlo-line-label {
+	font-size: 14px;
+	padding: 4px 0;
+	text-align: left;
+}
+
+.qlo-line-value {
+	font-size: 14px;
+	color: #71717a;
+	padding: 4px 0;
+	text-align: right;
+}
+
+.qlo-line-final-label {
+	font-weight: 700;
+	font-size: 14px;
+	padding-top: 10px;
+}
+
+.qlo-line-final-value {
+	font-weight: 700;
+	font-size: 14px;
+	padding-top: 10px;
+	text-align: right;
+}
+
+.qlo-link {
+	color: #0284c7;
+	text-decoration: underline;
+}
+
+.qlo-footer-text {
+	font-size: 14px;
+	line-height: 150%;
+}
+.qlo-section-title.qlo-section-title--plain {
+	border-bottom: 0;
+}
+.qlo-section-title + .qlo-table {
+	margin-top: 16px;
+}
+
+.qlo-table + .qlo-section-title {
+	margin-top: 20px;
+}
+.qlo-list td {
+	padding: 2px 0;
+}
+.qlo-row-logo + tr > td {
+	padding-top: 30px;
+}
+
+.qlo-row-intro + tr > td {
+	padding-top: 20px;
+}
+
+.qlo-row-card + tr > td {
+	padding-top: 10px;
+}
+
+.qlo-row-fields + tr > td {
+	padding-top: 30px;
+}
+
+.qlo-row-tips + tr > td {
+	padding-top: 30px;
+}
+.qlo-row-note + tr > td {
+	padding-top: 10px;
+}
+
+.qlo-row-title + tr > td {
+	padding-top: 20px;
+}
+
+.qlo-row-block + tr > td {
+	padding: 20px 0px;
+}
+
+.qlo-row-summary + tr > td {
+	padding-top: 0;
+}
+
+@media only screen and (max-width: 680px) {
+	.qlo-container {
+		width: 100% !important;
+		padding: 20px !important;
+	}
+	.qlo-card {
+		padding: 20px !important;
+	}
+	.qlo-display-heading {
+		font-size: 26px !important;
+	}
+	.qlo-stack-table, .qlo-stack-table thead, .qlo-stack-table tbody, .qlo-stack-table th, .qlo-stack-table td, .qlo-stack-table tr {
+		display: block !important;
+		width: auto !important;
+	}
+	.qlo-stack-table td {
+		text-align: left !important;
+	}
+}

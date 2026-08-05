@@ -232,6 +232,7 @@ admin/themes/default/css/screen.css
 !/mails/.htaccess
 !/mails/index.php
 !/mails/en/
+!/mails/global.css
 
 /themes/hotel-reservation-theme/cache/*
 !/themes/hotel-reservation-theme/cache/
