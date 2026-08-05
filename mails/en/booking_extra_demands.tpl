@@ -1,13 +1,11 @@
 {if isset($list) && $list}
-    <table class="table table-recap room-extra-demand-table">
+    <p class="qlo-section-title">Extra Demands Details</p>
+    <table class="qlo-table qlo-stack-table" cellpadding="0" cellspacing="0">
         <thead>
-            <tr>
-                <th colspan="3" class="table-caption">{l s='Room Extra Demands Detail'}</th>
-            </tr>
             <tr>
                 <th>{l s='Room Type'}</th>
                 <th>{l s='Name'}</th>
-                <th>{l s='Total'} <br /> {l s='(Tax excl.)'}</th>
+                <th>{l s='Total'} {l s='(Tax Excl.)'}</th>
             </tr>
         </thead>
         <tbody>
@@ -23,23 +21,13 @@
                                 <tr>
                                     {if $smarty.foreach.demandRow.first}
                                         <td rowspan="{$roomDemand['extra_demands']|count}">
-                                            <span style="font-size:12px; font-family:Open-sans, sans-serif; color:#555454;">
-                                                {$data_v['name']}<br>
-                                                {$rm_v['data_form']|date_format:"%d-%m-%Y"} {l s='to'} {$rm_v['data_to']|date_format:"%d-%m-%Y"}<br>
-                                                <strong>{l s='Room'} - {$roomCount}</strong>
-                                            </span>
+                                            {$data_v['name']}<br>
+                                            {$rm_v['data_form']|date_format:"%d-%m-%Y"} {l s='to'} {$rm_v['data_to']|date_format:"%d-%m-%Y"}<br>
+                                            <strong>{l s='Room'} - {$roomCount}</strong>
                                         </td>
                                     {/if}
-                                    <td>
-                                        <span style="font-size:12px; font-family:Open-sans, sans-serif; color:#555454;">
-                                            {$demand['name']}
-                                        </span>
-                                    </td>
-                                    <td>
-                                        <span style="font-size:12px; font-family:Open-sans, sans-serif; color:#555454;">
-                                            {convertPrice price=$demand['total_price_tax_excl']}
-                                        </span>
-                                    </td>
+                                    <td>{$demand['name']}</td>
+                                    <td>{convertPrice price=$demand['total_price_tax_excl']}</td>
                                 </tr>
                             {/foreach}
                             {assign var=roomCount value=$roomCount+1}
@@ -47,25 +35,22 @@
                     {/if}
                 {/foreach}
             {/foreach}
-
             {if !isset($room_demand_exists)}
                 <tr>
-                    <th colspan="3" class="table-caption">{l s='No room extra demands added.'}</th>
+                    <td colspan="3" class="qlo-table-empty">No Facilities Requested</td>
                 </tr>
             {/if}
         </tbody>
     </table>
 
-    <table class="table table-recap room-extra-service-table">
+    <p class="qlo-section-title">Additional Services Details</p>
+    <table class="qlo-table qlo-stack-table" cellpadding="0" cellspacing="0">
         <thead>
-            <tr>
-                <th colspan="4" class="table-caption">{l s='Rooms Services Detail'}</th>
-            </tr>
             <tr>
                 <th>{l s='Room Type'}</th>
                 <th>{l s='Name'}</th>
                 <th>{l s='Qty'}</th>
-                <th>{l s='Total'}</th>
+                <th>{l s='Total'} {l s='(Tax Excl.)'}</th>
             </tr>
         </thead>
         <tbody>
@@ -81,32 +66,20 @@
                                 <tr>
                                     {if $smarty.foreach.serviceRow.first}
                                         <td rowspan="{$roomService['additional_services']|count}">
-                                            <span style="font-size:12px; font-family:Open-sans, sans-serif; color:#555454;">
-                                                {$data_v['name']}<br>
-                                                {$rm_v['data_form']|date_format:"%d-%m-%Y"} {l s='to'} {$rm_v['data_to']|date_format:"%d-%m-%Y"}<br>
-                                                <strong>{l s='Room'} - {$roomCount}</strong>
-                                            </span>
+                                            {$data_v['name']}<br>
+                                            {$rm_v['data_form']|date_format:"%d-%m-%Y"} {l s='to'} {$rm_v['data_to']|date_format:"%d-%m-%Y"}<br>
+                                            <strong>{l s='Room'} - {$roomCount}</strong>
                                         </td>
                                     {/if}
+                                    <td>{$service['name']}</td>
                                     <td>
-                                        <span style="font-size:12px; font-family:Open-sans, sans-serif; color:#555454;">
-                                            {$service['name']}
-                                        </span>
+                                        {if $service['allow_multiple_quantity']}
+                                            {$service['quantity']}
+                                        {else}
+                                            {l s='--'}
+                                        {/if}
                                     </td>
-                                    <td>
-                                        <span style="font-size:12px; font-family:Open-sans, sans-serif; color:#555454;">
-                                            {if $service['allow_multiple_quantity']}
-                                                {$service['quantity']}
-                                            {else}
-                                                {l s='--'}
-                                            {/if}
-                                        </span>
-                                    </td>
-                                    <td>
-                                        <span style="font-size:12px; font-family:Open-sans, sans-serif; color:#555454;">
-                                            {convertPrice price=$service['total_price_tax_excl']}
-                                        </span>
-                                    </td>
+                                    <td>{convertPrice price=$service['total_price_tax_excl']}</td>
                                 </tr>
                             {/foreach}
                             {assign var=roomCount value=$roomCount+1}
@@ -114,53 +87,11 @@
                     {/if}
                 {/foreach}
             {/foreach}
-
             {if !isset($room_additinal_services_exists)}
                 <tr>
-                    <th colspan="4" class="table-caption">{l s='No room services added.'}</th>
+                    <td colspan="4" class="qlo-table-empty">No Services Requested</td>
                 </tr>
             {/if}
         </tbody>
     </table>
-
-	<style>
-        {if !isset($room_demand_exists)}
-            .room-extra-demand-table {
-                display: none;
-            }
-        {/if}
-        {if !isset($room_additinal_services_exists)}
-            .room-extra-service-table {
-                display: none;
-            }
-        {else}
-            .room-extra-demand-table {
-                margin-bottom: 20px;
-            }
-        {/if}
-		.room-extra-demand-table, .room-extra-service-table {
-		 	width:100%;
-			border-collapse:collapse;
-			padding:5px;
-		}
-		.room-extra-demand-table th, .room-extra-service-table th {
-			border:1px solid #D6D4D4;
-			background-color: #fbfbfb;
-			color: #333;
-			font-family: Arial;
-			font-size: 13px;
-            padding: 7px 7px 5px 10px;
-            text-align:left;
-		}
-        .room-extra-demand-table th.table-caption, .room-extra-service-table th.table-caption {
-			text-align: left;
-            padding:10px;
-		}
-		.room-extra-demand-table td, .room-extra-service-table td {
-			border:1px solid #D6D4D4;
-			padding:5px;
-            text-align:left;
-            padding: 5px 5px 5px 10px;
-		}
-	</style>
 {/if}

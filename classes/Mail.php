@@ -374,6 +374,9 @@ class MailCore extends ObjectModel
             $template_vars['{history_url}'] = Context::getContext()->link->getPageLink('history', true, $id_lang, null, false, $id_shop);
             $template_vars['{color}'] = Tools::safeOutput(Configuration::get('PS_MAIL_COLOR', null, null, $id_shop));
 
+            $global_css_path = _PS_MAIL_DIR_.'global.css';
+            $template_vars['{global_mail_css}'] = file_exists($global_css_path) ? Tools::file_get_contents($global_css_path) : '';
+
             // Get extra template_vars
             $extra_template_vars = array();
 

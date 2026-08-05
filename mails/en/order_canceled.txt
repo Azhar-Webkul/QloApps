@@ -1,9 +1,8 @@
-
 [/{shop_url}]
 
 Hi {firstname} {lastname},
 
-Your order with the reference {order_name} from <strong>{hotel_hotel_name}</strong> has
+Your order with the reference {order_name} from {hotel_hotel_name} has
 been canceled.
 
 Here are your order details:

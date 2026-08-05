@@ -2609,6 +2609,10 @@ class AdminTranslationsControllerCore extends AdminController
             return array('total' => $total, 'empty' => $empty);
         }
 
+        $global_css_uri = str_replace(_PS_ROOT_DIR_, __PS_BASE_URI__, _PS_MAIL_DIR_);
+        $global_css_uri = str_replace('//', '/', $global_css_uri).'global.css';
+        $global_css_uri .= '?v='.(int) @filemtime(_PS_MAIL_DIR_.'global.css');
+
         $this->tpl_view_vars = array_merge($this->tpl_view_vars, array(
             'limit_warning' => $this->displayLimitPostWarning($this->total_expression),
             'mod_security_warning' => Tools::apacheModExists('mod_security'),
@@ -2616,7 +2620,8 @@ class AdminTranslationsControllerCore extends AdminController
             'mail_content' => $this->displayMailContent($core_mails, $subject_mail, $this->lang_selected, 'core', $this->l('Core emails')),
             'cancel_url' => $this->context->link->getAdminLink('AdminTranslations'),
             'module_mails' => $module_mails,
-            'theme_name' => $this->theme_selected
+            'theme_name' => $this->theme_selected,
+            'global_mail_css_url' => $global_css_uri,
         ));
 
         $this->initToolbar();

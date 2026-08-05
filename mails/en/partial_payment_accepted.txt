@@ -1,9 +1,8 @@
-
 [/{shop_url}]
 
 Hi {firstname} {lastname},
 
-Thank you for booking with <strong>{hotel_hotel_name}</strong>!
+Thank you for booking with {hotel_hotel_name}!
 
 Order {order_name} - Payment processed
 

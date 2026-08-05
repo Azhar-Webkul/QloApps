@@ -12,25 +12,25 @@
                     {foreach $rm_v['extra_demands'] as $roomDemand}
                         {foreach name=demandRow from=$roomDemand['extra_demands'] item=demand}
                                 {if $smarty.foreach.demandRow.first}
-                                    <td class="text-center" rowspan="{$roomDemand['extra_demands']|count}">
-                                        <span style="font-size:12px; font-family:Open-sans, sans-serif; color:#555454;">
-                                            {$data_v['name']}<br>
-                                            {$rm_v['data_form']|date_format:"%d-%m-%Y"} {l s='to'} {$rm_v['data_to']|date_format:"%d-%m-%Y"}<br>
-                                            <strong>{l s='Room'} - {$roomCount}</strong>
-                                        </span>
-                                    </td>
+                                    
+                                        
+                                            {$data_v['name']}
+                                            {$rm_v['data_form']|date_format:"%d-%m-%Y"} {l s='to'} {$rm_v['data_to']|date_format:"%d-%m-%Y"}
+                                            {l s='Room'} - {$roomCount}
+                                        
+                                    
                                 {/if}
-                                <td class="text-center">
-                                    <span style="font-size:12px; font-family:Open-sans, sans-serif; color:#555454;">
+                                
+                                    
                                         {$demand['name']}
-                                    </span>
-                                </td>
-                                <td class="text-center">
-                                    <span style="font-size:12px; font-family:Open-sans, sans-serif; color:#555454;">
+                                    
+                                
+                                
+                                    
                                         {convertPrice price=$demand['total_price_tax_excl']}
-                                    </span>
-                                </td>
-                            </tr>
+                                    
+                                
+                            
                         {/foreach}
                         {assign var=roomCount value=$roomCount+1}
                     {/foreach}

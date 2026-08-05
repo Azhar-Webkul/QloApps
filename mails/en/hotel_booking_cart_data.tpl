@@ -1,30 +1,33 @@
 {if isset($list) && $list}
-    <table class="table table-recap room-booking-table">
+    <p class="qlo-section-title">Room Booking Details</p>
+    <table class="qlo-table qlo-stack-table" cellpadding="0" cellspacing="0">
         <thead>
-            <tr>
-                <th colspan="9" class="table-caption">{l s='Rooms Booking Detail'}</th>
-            </tr>
             <tr>
                 <th>{l s="Room Image"}</th>
                 <th>{l s="Room Description"}</th>
-                <th>{l s="Room Capcity"}</th>
+                <th>{l s="Hotel"}</th>
+                <th>{l s="Room Capacity"}</th>
                 <th>{l s="Unit Price"}</th>
-                <th>{l s="Rooms Qty"}</th>
-                <th>{l s="Check-in Date"}</th>
-                <th>{l s="Check-out Date"}</th>
+                <th>{l s="Qty"}</th>
+                <th>{l s="Check-In"}</th>
+                <th>{l s="Check-Out"}</th>
                 <th>{l s="Total"}</th>
             </tr>
         </thead>
+        <tbody>
         {foreach from=$list key=data_k item=data_v}
             {foreach from=$data_v['date_diff'] key=rm_k item=rm_v}
                 <tr>
                     <td>
-                        <img src="{$data_v['cover_img']}" class="img-responsive" />
+                        <img src="{$data_v['cover_img']}" alt="{$data_v['name']}" />
                     </td>
-                    <td >
+                    <td>
                         {$data_v['name']}
                     </td>
-                    <td >
+                    <td>
+                        {$data_v['hotel_name']}
+                    </td>
+                    <td>
                         {$rm_v['adults']} {l s='Adults'}, {$rm_v['children']} {l s='Children'}
                     </td>
                     <td>
@@ -47,34 +50,6 @@
                 </tr>
             {/foreach}
         {/foreach}
+        </tbody>
     </table>
-    <style>
-        .room-booking-table {
-            width:100%;
-            border-collapse:collapse;
-            padding:5px;
-        }
-        .room-booking-table th {
-            border:1px solid #D6D4D4;
-            background-color: #fbfbfb;
-            color: #333;
-            font-family: Arial;
-            font-size: 13px;
-            padding: 7px 7px 5px 10px;
-            text-align:left;
-        }
-        .room-booking-table th.table-caption {
-            text-align: left;
-            padding:10px;
-        }
-        .room-booking-table td {
-            border:1px solid #D6D4D4;
-            padding:5px;
-            text-align:left;
-            padding: 5px 5px 5px 10px;
-        }
-        .pull-right {
-            float: right;
-        }
-    </style>
 {/if}
